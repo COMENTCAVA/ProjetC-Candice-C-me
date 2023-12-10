@@ -62,33 +62,33 @@ int main() {
 
 
 
-    Date_rdv date;
-    date.annee=2004;
-    date.mois=6;
-    date.jour=3;
+    char* obj = scanString(1);
+    RDV *rdv = createRendezvous(3, 4, 4, 32, 3, 2, 4, obj);
 
-    Heure_rdv heure;
-    heure.heure=10;
-    heure.minute=5;
+    char* nom = scanString(2);
+    char* prenom = scanString(3);
+    Contact * contact = createContact(nom, prenom);
+    contact->rendez_vous= (struct RDV *) rdv;
+    afficher_rdv_contact(contact);
 
-    Duree_rdv duree;
-    duree.minute=20;
-    duree.heure=0;
+    obj = scanString(1);
+    RDV *rdv1 = createRendezvous(3, 4, 4, 32, 3, 2, 4, obj);
+    nom = scanString(2);
+    prenom = scanString(3);
 
-    char* obj = scanString();
-    RDV *rdv = createRendezvous(date, heure, duree, obj);
-    Contact contact = createContact("come", "Massaini");
-    p_cell_agenda cell = createCellAgenda(contact);
-    cell->rendez_vous = rdv;
+    Contact *c2 = createContact(nom, prenom);
+    c2->rendez_vous= (struct RDV *) rdv1;
 
-    Agenda agenda = createAgenda(4);
-    agenda.head[0] = cell;
-    afficher_rdv_contact(agenda, contact);
-    printf("%s", agenda.head[0]->contact.nom);
+    Agenda *agenda = createAgenda(4);
+    agenda->head[0] = contact;
+    agenda->head[0]->next[0] = c2;
+    afficher_rdv_contact(c2);
+    printf("%s", agenda->head[0]->nom);
 
     printf("\n");
-    rechercherContact(agenda, "Massa");
-    display_list(agenda);
+    prenom = scanString(3);
+    rechercherContact(*agenda, prenom);
+    display_list(*agenda);
 
     return 0;
 }
